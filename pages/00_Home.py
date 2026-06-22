@@ -1,137 +1,57 @@
 import streamlit as st
 
-st.title("Project Overview")
-
-st.subheader(
-    "Knowledge-Rich Crypto Decision Support System"
+st.title(
+    "Knowledge-Rich Cryptocurrency Decision Support System"
 )
 
-st.write(
-    """
-This application recommends the most suitable machine learning model
-for Bitcoin price movement prediction using a weighted Decision Support System (DSS).
-"""
-)
-
-st.divider()
-
-st.subheader("Project Workflow")
-
-st.markdown(
-"""
-
-1. Historical Bitcoin Data
-
-2. Data Preprocessing
-
-3. Feature Engineering
-
-4. Machine Learning Models
-
-5. Weighted DSS Matrix
-
-6. Knowledge Base
-
-7. Final Recommendation
-
-"""
-)
-
-st.divider()
-
-st.subheader("Models Used")
-
-c1, c2 = st.columns(2)
-
-c1.info(
-    "Random Forest"
-)
-
-c2.info(
-    "Gradient Boosting"
-)
-
-st.divider()
-
-st.subheader("Decision Criteria")
-
-st.markdown(
-"""
-
-• Accuracy
-
-• F1 Score
-
-• Training Time
-
-• Prediction Time
-
-• Interpretability
-
-"""
-)
-
-st.divider()
-
-st.subheader("System Architecture")
-
-st.markdown(
-"""
-
-Data Acquisition
-
-↓
-
-Data Processing
-
-↓
-
-Modeling Layer
-
-↓
-
-DSS Layer
-
-↓
-
-Decision Output
-
-"""
-)
-st.divider()
-
-st.subheader(
-    "Models Used"
-)
-
-c1, c2 = st.columns(2)
-
-c1.info(
-    "Random Forest"
-)
-
-c2.info(
-    "Gradient Boosting"
+st.caption(
+    "Machine Learning based Bitcoin market analysis and decision support."
 )
 
 st.divider()
 
 st.subheader(
-    "Decision Criteria"
+    "Project Objectives"
 )
 
 st.markdown(
 """
+- Analyze historical Bitcoin market trends
 
-• Accuracy
+- Compare machine learning models
 
-• F1 Score
+- Apply a weighted DSS framework
 
-• Training Time
+- Generate market insights
 
-• Prediction Time
-
-• Interpretability
-
+- Recommend investment actions
 """
+)
+
+st.divider()
+
+st.subheader(
+    "Workflow"
+)
+
+st.markdown(
+"""
+1. Load historical Bitcoin data
+
+2. Train machine learning models
+
+3. Compare model performance
+
+4. Apply DSS scoring
+
+5. Generate recommendations
+
+6. Support investment decisions
+"""
+)
+
+st.divider()
+
+st.success(
+    "Use the sidebar to explore the application."
 )

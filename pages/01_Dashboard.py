@@ -46,7 +46,30 @@ c3.metric(
     "Records",
     total_records
 )
+c1, c2, c3, c4 = st.columns(4)
 
+c1.metric(
+    "Latest Price",
+    f"${latest_price:,.0f}"
+)
+
+c2.metric(
+    "Best Model",
+    best_model
+)
+
+c3.metric(
+    "Records",
+    len(df)
+)
+
+c4.metric(
+    "DSS Score",
+    round(
+        dss.iloc[0]["DSS_Score"],
+        2
+    )
+)
 st.caption(
     f"Last available record in dataset: {dataset_date}"
 )
