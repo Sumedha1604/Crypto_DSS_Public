@@ -1,0 +1,9 @@
+RSI = 58.98. Market is neutral.
+MACD = 87.82. Bullish momentum detected.
+Price is above MA10 indicating an uptrend.
+
+Bullish Signals: 2
+Bearish Signals: 0
+Neutral Signals: 1
+Market Outlook: Bullish
+Suggested Action: BUY / HOLD
