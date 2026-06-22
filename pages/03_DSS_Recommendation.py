@@ -4,46 +4,27 @@ import pandas as pd
 st.title("DSS Recommendation")
 
 st.caption(
-    "Weighted decision support system for model recommendation."
-)
-priority = st.selectbox(
-
-    "What would you like to prioritize?",
-
-    [
-
-        "Balanced Performance",
-
-        "Speed",
-
-        "Interpretability"
-
-    ]
-
+    "Weighted Decision Support System for model selection."
 )
 
-if priority == "Speed":
+# ------------------------
+# Load DSS Scores
+# ------------------------
 
-    st.info(
-        "Priority: Faster prediction performance."
-    )
-
-elif priority == "Interpretability":
-
-    st.info(
-        "Priority: Easier to understand models."
-    )
-
-else:
-
-    st.info(
-        "Priority: Balanced overall performance."
-    )
 dss = pd.read_csv(
     "outputs/dss_scores.csv"
 )
 
 best_model = dss.iloc[0]["Model"]
+
+best_score = round(
+    dss.iloc[0]["DSS_Score"],
+    2
+)
+
+# ------------------------
+# Decision Criteria
+# ------------------------
 
 st.subheader(
     "Decision Criteria"
@@ -51,7 +32,7 @@ st.subheader(
 
 criteria = pd.DataFrame({
 
-    "Criteria":[
+    "Criteria": [
 
         "Accuracy",
 
@@ -65,7 +46,7 @@ criteria = pd.DataFrame({
 
     ],
 
-    "Weight":[
+    "Weight": [
 
         "30%",
 
@@ -81,179 +62,126 @@ criteria = pd.DataFrame({
 
 })
 
-st.table(criteria)
-
-st.divider()
-
-st.subheader(
-    "DSS Ranking"
-)
-
-ranking = dss[["Model", "DSS_Score"]]
-
 st.dataframe(
-    ranking,
-    use_container_width=True,
-    hide_index=True
+
+    criteria,
+
+    hide_index=True,
+
+    use_container_width=True
+
 )
 
 st.divider()
 
-st.subheader(
-    "Recommended Model"
-)
+# ------------------------
+# Recommended Model
+# ------------------------
 
-st.success(
+c1, c2 = st.columns(2)
+
+c1.metric(
+
+    "Recommended Model",
+
     best_model
+
+)
+
+c2.metric(
+
+    "DSS Score",
+
+    best_score
+
 )
 
 st.divider()
+
+# ------------------------
+# Why Selected
+# ------------------------
 
 st.subheader(
     "Why was it selected?"
 )
-st.divider()
 
-st.subheader(
-    "Weighted DSS Matrix"
-)
-
-matrix = dss[[
-    "Model",
-
-    "Accuracy",
-
-    "F1",
-
-    "Training_Time",
-
-    "Prediction_Time",
-
-    "DSS_Score"
-
-]]
-
-display = matrix.copy()
-
-display["Accuracy"] = (
-    display["Accuracy"] * 100
-).round(2)
-
-display["F1"] = (
-    display["F1"] * 100
-).round(2)
-
-display["Training_Time"] = (
-    display["Training_Time"]
-).round(2)
-
-display["Prediction_Time"] = (
-    display["Prediction_Time"]
-).round(4)
-
-display["DSS_Score"] = (
-    display["DSS_Score"]
-).round(2)
-
-st.dataframe(
-
-    display,
-
-    use_container_width=True,
-
-    hide_index=True
-
-)
-st.markdown(
+st.success(
 """
+✔ Higher Accuracy
 
-• Higher Accuracy
+✔ Higher F1 Score
 
-• Higher F1 Score
+✔ Better Recall
 
-• Better Recall
+✔ Faster Prediction Speed
 
-• Faster Prediction Speed
-
-• Highest overall DSS score
-
+✔ Highest overall DSS score
 """
 )
 
 st.divider()
+
+# ------------------------
+# Knowledge Base
+# ------------------------
 
 st.subheader(
     "Knowledge Base"
 )
 
-st.info(
-"""
+knowledge = pd.DataFrame({
 
-RSI → Measures market strength
+    "Indicator": [
 
-MACD → Detects trend momentum
+        "RSI",
 
-Volatility → Measures market uncertainty
+        "MACD",
 
-Lag Features → Capture historical market behaviour
+        "Volatility",
 
-"""
+        "Lag Features"
+
+    ],
+
+    "Purpose": [
+
+        "Measures market strength",
+
+        "Detects trend momentum",
+
+        "Measures market uncertainty",
+
+        "Captures historical market behaviour"
+
+    ]
+
+})
+
+st.dataframe(
+
+    knowledge,
+
+    hide_index=True,
+
+    use_container_width=True
+
 )
 
 st.divider()
+
+# ------------------------
+# DSS Explanation
+# ------------------------
 
 st.subheader(
     "Final DSS Explanation"
 )
 
-st.success(
+st.info(
 """
+The recommendation is based on multiple weighted criteria instead of a single metric.
 
-The recommendation is based on multiple weighted criteria rather than a single performance metric.
-
-The model with the highest DSS score is selected.
-
+The model with the highest DSS score is selected automatically.
 """
-)
-st.divider()
-
-st.subheader(
-    "Weighted DSS Matrix"
-)
-
-matrix = dss[[
-    "Model",
-    "Accuracy",
-    "F1",
-    "Training_Time",
-    "Prediction_Time",
-    "DSS_Score"
-]]
-
-display = matrix.copy()
-
-display["Accuracy"] = (
-    display["Accuracy"] * 100
-).round(2)
-
-display["F1"] = (
-    display["F1"] * 100
-).round(2)
-
-display["Training_Time"] = (
-    display["Training_Time"]
-).round(2)
-
-display["Prediction_Time"] = (
-    display["Prediction_Time"]
-).round(4)
-
-display["DSS_Score"] = (
-    display["DSS_Score"]
-).round(2)
-
-st.dataframe(
-    display,
-    use_container_width=True,
-    hide_index=True
 )
