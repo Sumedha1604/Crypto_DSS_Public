@@ -9,9 +9,17 @@ st.caption(
     "Analyze historical Bitcoin market data using machine learning."
 )
 
+# ------------------------
+# Load Dataset
+# ------------------------
+
 df = pd.read_csv(
     "data/final_btc_dataset.csv"
 )
+
+# ------------------------
+# User Input
+# ------------------------
 
 window = st.slider(
     "Historical Bitcoin Records",
@@ -24,6 +32,10 @@ window = st.slider(
 st.info(
     "Public deployment uses Gradient Boosting."
 )
+
+# ------------------------
+# Run Analysis
+# ------------------------
 
 if st.button(
     "Analyze Market",
@@ -84,11 +96,25 @@ if st.button(
         predictions == 0
     )
 
-    trend = (
-        "Bullish"
-        if bullish_count > bearish_count
-        else "Bearish"
-    )
+    # ------------------------
+    # Trend
+    # ------------------------
+
+    if bullish_count > bearish_count:
+
+        trend = "Bullish"
+
+    elif bearish_count > bullish_count:
+
+        trend = "Bearish"
+
+    else:
+
+        trend = "Neutral"
+
+    # ------------------------
+    # Confidence
+    # ------------------------
 
     confidence = round(
 
@@ -105,24 +131,31 @@ if st.button(
 
     )
 
-    with open(
-        "outputs/market_insights.txt",
-        "r"
-    ) as f:
+    # ------------------------
+    # Recommendation
+    # ------------------------
 
-        insights = f.read()
-
-    if "BUY / HOLD" in insights:
+    if bullish_count > bearish_count:
 
         recommendation = "Buy / Hold"
 
-    elif "SELL / WAIT" in insights:
+        outlook = "Bullish"
+
+    elif bearish_count > bullish_count:
 
         recommendation = "Sell / Wait"
+
+        outlook = "Bearish"
 
     else:
 
         recommendation = "Hold"
+
+        outlook = "Neutral"
+
+    # ------------------------
+    # Metrics
+    # ------------------------
 
     st.divider()
 
@@ -156,6 +189,20 @@ if st.button(
         "Bearish Records",
         bearish_count
     )
+
+    # ------------------------
+    # Dynamic Insights
+    # ------------------------
+
+    insights = f"""
+Bullish Signals: {bullish_count}
+
+Bearish Signals: {bearish_count}
+
+Market Outlook: {outlook}
+
+Suggested Action: {recommendation}
+"""
 
     st.divider()
 
