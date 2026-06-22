@@ -6,19 +6,11 @@ import numpy as np
 st.title("Market Analysis")
 
 st.caption(
-    "Analyze historical Bitcoin market data using trained machine learning models."
+    "Analyze historical Bitcoin market data using machine learning."
 )
 
 df = pd.read_csv(
     "data/final_btc_dataset.csv"
-)
-
-model_name = st.selectbox(
-    "Prediction Model",
-    [
-        "Random Forest",
-        "Gradient Boosting"
-    ]
 )
 
 window = st.slider(
@@ -29,22 +21,18 @@ window = st.slider(
     step=10
 )
 
+st.info(
+    "Public deployment uses Gradient Boosting."
+)
+
 if st.button(
     "Analyze Market",
     use_container_width=True
 ):
 
-    if model_name == "Random Forest":
-
-        model = joblib.load(
-            "models/random_forest.pkl"
-        )
-
-    else:
-
-        model = joblib.load(
-            "models/gradient_boosting.pkl"
-        )
+    model = joblib.load(
+        "models/gradient_boosting.pkl"
+    )
 
     features = [
 
@@ -88,17 +76,19 @@ if st.button(
 
     probabilities = model.predict_proba(X)
 
-    bullish_count = np.sum(predictions == 1)
+    bullish_count = np.sum(
+        predictions == 1
+    )
 
-    bearish_count = np.sum(predictions == 0)
+    bearish_count = np.sum(
+        predictions == 0
+    )
 
-    if bullish_count > bearish_count:
-
-        trend = "Bullish"
-
-    else:
-
-        trend = "Bearish"
+    trend = (
+        "Bullish"
+        if bullish_count > bearish_count
+        else "Bearish"
+    )
 
     confidence = round(
 
@@ -180,5 +170,5 @@ if st.button(
 else:
 
     st.info(
-        "Select a model and run the analysis."
+        "Choose historical records and click Analyze Market."
     )
