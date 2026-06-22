@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import plotly.graph_objects as go
+import plotly.express as px
 
 st.title("Market Dashboard")
 
@@ -18,34 +18,21 @@ dss = pd.read_csv(
     "outputs/dss_scores.csv"
 )
 
-# Summary values
+# Values
 
-dataset_price = df["Close"].iloc[-1]
-
-dataset_date = df["Date"].iloc[-1]
+latest_price = df["Close"].iloc[-1]
 
 best_model = dss.iloc[0]["Model"]
 
-total_records = len(df)
-
-# Top cards
-
-c1, c2, c3 = st.columns(3)
-
-c1.metric(
-    "Dataset Closing Price",
-    f"${dataset_price:,.0f}"
+dss_score = round(
+    dss.iloc[0]["DSS_Score"],
+    2
 )
 
-c2.metric(
-    "Best Model",
-    best_model
-)
+records = len(df)
 
-c3.metric(
-    "Records",
-    total_records
-)
+# Metrics
+
 c1, c2, c3, c4 = st.columns(4)
 
 c1.metric(
@@ -60,110 +47,61 @@ c2.metric(
 
 c3.metric(
     "Records",
-    len(df)
+    records
 )
 
 c4.metric(
     "DSS Score",
-    round(
-        dss.iloc[0]["DSS_Score"],
-        2
-    )
-)
-st.caption(
-    f"Last available record in dataset: {dataset_date}"
+    dss_score
 )
 
 st.divider()
 
-# Interactive selector
+# Closing Price Chart
 
 st.subheader(
-    "Bitcoin Price Trend"
+    "Bitcoin Closing Price Trend"
 )
 
-view = st.selectbox(
+chart_data = df.tail(300)
 
-    "View Data",
-
-    [
-
-        "Last 30 Records",
-
-        "Last 100 Records",
-
-        "Last 500 Records",
-
-        "Entire Dataset"
-
-    ]
-
-)
-
-if view == "Last 30 Records":
-
-    chart_df = df.tail(30)
-
-elif view == "Last 100 Records":
-
-    chart_df = df.tail(100)
-
-elif view == "Last 500 Records":
-
-    chart_df = df.tail(500)
-
-else:
-
-    chart_df = df
-
-# Graph
-
-fig = go.Figure()
-
-fig.add_trace(
-
-    go.Scatter(
-
-        x=chart_df["Date"],
-
-        y=chart_df["Close"],
-
-        mode="lines",
-
-        name="Bitcoin"
-
-    )
-
-)
-
-fig.update_layout(
-
-    height=450,
-
-    xaxis_title="",
-
-    yaxis_title="Price (USD)",
-
-    hovermode="x unified"
-
+fig = px.line(
+    chart_data,
+    y="Close"
 )
 
 st.plotly_chart(
-
     fig,
-
     use_container_width=True
-
 )
 
 st.divider()
 
-# DSS summary
+# Volume Chart
 
 st.subheader(
-    "Decision Support Summary"
+    "Bitcoin Trading Volume"
 )
 
-st.success(
-    f"Recommended Model: {best_model}"
+fig2 = px.line(
+    chart_data,
+    y="Volume BTC"
+)
+
+st.plotly_chart(
+    fig2,
+    use_container_width=True
+)
+
+st.divider()
+
+# Dataset Preview
+
+st.subheader(
+    "Dataset Preview"
+)
+
+st.dataframe(
+    df.tail(10),
+    use_container_width=True
 )

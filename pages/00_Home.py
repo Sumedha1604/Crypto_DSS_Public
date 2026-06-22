@@ -1,57 +1,124 @@
 import streamlit as st
+import pandas as pd
+import plotly.express as px
 
-st.title(
-    "Knowledge-Rich Cryptocurrency Decision Support System"
-)
+st.title("Market Dashboard")
 
 st.caption(
-    "Machine Learning based Bitcoin market analysis and decision support."
+    "Overview of historical Bitcoin market data and DSS outputs."
+)
+
+# -------------------
+# Load Data
+# -------------------
+
+df = pd.read_csv(
+    "data/final_btc_dataset.csv"
+)
+
+dss = pd.read_csv(
+    "outputs/dss_scores.csv"
+)
+
+# -------------------
+# Values
+# -------------------
+
+latest_price = df.iloc[-1]["Close"]
+
+best_model = dss.iloc[0]["Model"]
+
+dss_score = round(
+    dss.iloc[0]["DSS_Score"],
+    2
+)
+
+records = len(df)
+
+# -------------------
+# Metrics
+# -------------------
+
+c1, c2, c3, c4 = st.columns(4)
+
+c1.metric(
+    "Latest Price",
+    f"${latest_price:,.0f}"
+)
+
+c2.metric(
+    "Best Model",
+    best_model
+)
+
+c3.metric(
+    "Records",
+    records
+)
+
+c4.metric(
+    "DSS Score",
+    dss_score
 )
 
 st.divider()
+
+# -------------------
+# Closing Price Trend
+# -------------------
 
 st.subheader(
-    "Project Objectives"
+    "Bitcoin Closing Price Trend"
 )
 
-st.markdown(
-"""
-- Analyze historical Bitcoin market trends
+chart_data = df.tail(300)
 
-- Compare machine learning models
+fig = px.line(
+    chart_data,
+    x=chart_data.index,
+    y="Close"
+)
 
-- Apply a weighted DSS framework
-
-- Generate market insights
-
-- Recommend investment actions
-"""
+st.plotly_chart(
+    fig,
+    use_container_width=True
 )
 
 st.divider()
+
+# -------------------
+# Volume Trend
+# -------------------
 
 st.subheader(
-    "Workflow"
+    "Bitcoin Trading Volume"
 )
 
-st.markdown(
-"""
-1. Load historical Bitcoin data
+fig2 = px.line(
+    chart_data,
+    x=chart_data.index,
+    y="Volume BTC"
+)
 
-2. Train machine learning models
-
-3. Compare model performance
-
-4. Apply DSS scoring
-
-5. Generate recommendations
-
-6. Support investment decisions
-"""
+st.plotly_chart(
+    fig2,
+    use_container_width=True
 )
 
 st.divider()
 
-st.success(
-    "Use the sidebar to explore the application."
+# -------------------
+# Dataset Preview
+# -------------------
+
+st.subheader(
+    "Dataset Preview"
+)
+
+st.dataframe(
+
+    df.tail(10),
+
+    use_container_width=True
+
 )
