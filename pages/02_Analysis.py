@@ -29,9 +29,6 @@ window = st.slider(
     step=10
 )
 
-st.info(
-    "Public deployment uses Gradient Boosting."
-)
 
 # ------------------------
 # Run Analysis
